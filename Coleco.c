@@ -2911,7 +2911,8 @@ static void UpdateFujiNet (int mode,int dev_id,unsigned DCB)
   switch (RAM[DCB])
   {
    case 0:                              /* clear DCB                          */
-    RAM[DCB]=0x80;
+    /* EOS zeroes the DCB table with an LDIR before a scan; a reply written
+       here would be copied into the following bytes, device ids included. */
     break;
    case 1:                              /* request status                     */
     if (AdamNet_DiskStatus (dev,&st)==0)
@@ -2967,6 +2968,8 @@ static void UpdateFujiNet (int mode,int dev_id,unsigned DCB)
   /* EXPERIMENTAL char path; see AdamNet.h. */
   switch (RAM[DCB])
   {
+   case 0:                              /* clear DCB: see the block case      */
+    break;
    case 1:                              /* status                             */
     if (AdamNet_CharStatus (dev,&st,NULL)==0)
     {
